@@ -1,31 +1,48 @@
-import React, { MutableRefObject, RefObject, useEffect, useRef } from 'react';
+import React from 'react';
 import './App.scss';
-import HeaderContainer from './components/Header/HeaderContainer';
-import InputContainer from './components/Input/InputContainer';
-import ChatContainer from './components/Chat/ChatContainer';
+
+import firebase from "firebase/app";
+import 'firebase/firestore';
+import 'firebase/auth';
+
+import { useAuthState } from 'react-firebase-hooks/auth'
+import { Login } from './components/Login/Login/Login';
+import { Header } from './components/Header/Header/Header';
+import { Chat } from './components/Chat/Chat/Chat';
+import { Preloader } from './components/common/Preloader';
+
+firebase.initializeApp({
+  apiKey: "AIzaSyDJWcxWzMuBAVQYxnvS7Hfa3OUv9x1y0d8",
+  authDomain: "fasfsf-a445d.firebaseapp.com",
+  projectId: "fasfsf-a445d",
+  storageBucket: "fasfsf-a445d.appspot.com",
+  messagingSenderId: "1084450180449",
+  appId: "1:1084450180449:web:c31b029cfd4bea0af48920",
+  measurementId: "G-P9TV46LPYN"
+})
+
+const auth = firebase.auth()
+const firestore = firebase.firestore()
 
 function App() {
-  
-  const messagesDiv: MutableRefObject<HTMLDivElement | null> = useRef(null)
 
-  useEffect(() => {
-    messagesDiv.current!.scrollIntoView({behavior: "smooth"})
-  }, [])
-
-  const sendMessage = () => {
-    
-    messagesDiv.current!.scrollIntoView({behavior: "smooth"})
-  }
-  
-
+  const [user] = useAuthState(auth)
+  // todo set preloader
   return (
-	<div className="app">
-		<div className="app__wrapper">
-            <HeaderContainer></HeaderContainer>
-            <ChatContainer messagesDiv={messagesDiv}></ChatContainer>
-            <InputContainer sendMessage={sendMessage}></InputContainer>
-	  	</div>
-	</div>
+    <div className="app">
+      {user ? <div className="app__wrapper">
+              <Header 
+                auth={auth}
+                />
+              <Chat 
+                auth={auth}
+                firebase={firebase}
+                firestore={firestore} 
+                />
+        </div> : <Login 
+                  firebase={firebase}
+                    />}
+    </div>
   );
 }
 

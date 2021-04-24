@@ -1,45 +1,61 @@
-import React, { RefObject, useEffect, useRef } from "react"
+import React, { MutableRefObject, useEffect, useRef, useState } from "react"
 import "./Chat.scss"
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { Message } from "./Message/Message"
+import { Preloader } from "../../common/Preloader";
 
 type PropsType = {
-  messagesDiv: RefObject<HTMLDivElement>
+  firestore: any
+  auth: any
+  firebase: any
 }
 
 
 export const Chat: React.FC<PropsType> = (props) => {
 
-  let messages = [
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "1 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "2 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "3 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "4 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-    {avatar: "https://lh3.googleusercontent.com/a-/AOh14GjCaX9D3xxgzAvPx19gaaTqoWPfeyTa9-PV-JNztA=s96-c", message: "5 Hello everyone"},
-  ]
+  const messagesDiv: MutableRefObject<HTMLDivElement | null> = useRef(null)
 
+  const [isLoader, setIsLoader] = useState(false) 
 
-  
+  const sendMessage = async(e: any) => {
 
+    e.preventDefault()
+    const { uid, photoURL } = props.auth.currentUser
 
+    await messagesRef.add({
+      text: formValue,
+      createdAt: props.firebase.firestore.FieldValue.serverTimestamp(),
+      uid,
+      photoURL
+    })
+    setFormValue("")
+    messagesDiv.current!.scrollIntoView({behavior: "smooth"})
+  }
+
+  const messagesRef = props.firestore.collection('messages')
+  const query = messagesRef.orderBy('createdAt');
+
+  const [messages] = useCollectionData(query, { idField: 'id' });
+
+  useEffect(() => {
+    messagesDiv.current!.scrollIntoView({behavior: "smooth"})
+  }, [messages])
+
+  const [formValue, setFormValue] = useState('');
 
 
   return (
+    <>
     <div className="chat__wrapper">
-      {messages.map(message => <Message avatar={message.avatar} message={message.message}/>)}
+      {messages ? messages.map(message => <Message auth={props.auth} message={message}/>) : <Preloader></Preloader>}
       {/* @ts-ignore */}
-      <div ref={props.messagesDiv}></div>
-
+      <div ref={messagesDiv}></div>
     </div>
+
+    <form onSubmit={sendMessage} className="input__wrapper">
+      <input placeholder="Message" value={formValue} onChange={(e) => setFormValue(e.target.value)} className="input__input"></input>
+      <button disabled={!formValue} type="submit" className="input__btn"></button>
+    </form>
+    </>
   )
 };

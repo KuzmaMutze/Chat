@@ -1,6 +1,5 @@
 .message{
     &__wrapper{
-        height: 72px;     
         display: flex;
         align-items: center;   
         padding: 10px 0;
@@ -15,9 +14,17 @@
             margin-left: 17px;
             align-items: center;
             color: #fff;
-            background: rgba(0, 0, 0, 0.658);
-            border-radius: 15px;
+            background: #000;
+            border-radius: 30px;
         }
- 
+    }
+}
+
+.sent{
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    span{
+        margin-right: 17px;
+        background: #0048BA;
     }
 }

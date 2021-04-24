@@ -2,14 +2,16 @@ import React from "react"
 import "./Message.scss";
 
 type PropsType = {
-  message: string
-  avatar: string
+  message: any
+  auth: any
 }
 export const Message: React.FC<PropsType> = (props) => {
+
+  const messageClass = props.message.uid === props.auth.currentUser.uid ? 'sent' : 'received';
   
   return (
-    <div className="message__wrapper">
-      <img src={props.avatar} alt=""/> <span>{props.message}</span>
+    <div className={`message__wrapper ${messageClass}`}>
+      <img src={props.message.photoURL} alt="avatar"/> <span>{props.message.text}</span>
     </div>
   )
 };

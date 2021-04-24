@@ -1,0 +1,71 @@
+.login{
+    height: 450px;
+    width: 30%;
+    margin: 0 auto;
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    display: flex;
+    flex-direction: column;
+    color: #fff;
+}
+
+.btnGoogle{
+    margin-bottom: 60px;
+}
+
+.email{
+    margin-top: 60px;
+}
+
+.password{
+    margin-top: 10px;
+}
+
+.title{
+    padding-top: 55px;
+    font-size: 28px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+input {
+    text-align: left;
+    width: 250px;
+    margin: 0 auto;
+    font-size: 1rem;
+    padding: 10px 20px;
+    font-family: "Poppins";
+    background: none;
+    color: #fff;
+    outline: 1px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.295);
+    border-radius: 10px;
+}
+
+input::placeholder{
+    color: #fff;
+}
+
+.btnCreate{
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+button {
+    cursor: pointer;
+    font-family: "Poppins";
+    margin: 0 auto;
+    padding: 10px 20px;
+    width: 300px;
+    font-size: 1rem;
+    color: #fff;
+    background: rgba( 255, 255, 255, 0.25 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}

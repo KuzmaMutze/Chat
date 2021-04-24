@@ -1,13 +1,16 @@
 import React from "react"
 import "./Header.scss"
 
-type PropsType = {}
+type PropsType = {
+  auth: any
+}
 
 export const Header: React.FC<PropsType> = (props) => {
-  return (
+
+  return props.auth.currentUser && (
     <div className="header__wrapper">
-      <span>⚛️🔥💬</span>
-      <button>Sign out</button>
+      <span>Chat</span>
+      <button onClick={() => props.auth.signOut()}>Sign out</button>
     </div>
   )
 };
