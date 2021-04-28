@@ -2,7 +2,7 @@ import React, { MutableRefObject, useEffect, useRef, useState } from "react"
 import "./Chat.scss"
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { Message } from "./Message/Message"
-import { Preloader } from "../../common/Preloader";
+import { Preloader } from "../common/Preloader";
 
 type PropsType = {
   firestore: any
@@ -14,9 +14,7 @@ type PropsType = {
 export const Chat: React.FC<PropsType> = (props) => {
 
   const messagesDiv: MutableRefObject<HTMLDivElement | null> = useRef(null)
-
-  const [isLoader, setIsLoader] = useState(false) 
-
+  
   const sendMessage = async(e: any) => {
 
     e.preventDefault()
@@ -31,8 +29,8 @@ export const Chat: React.FC<PropsType> = (props) => {
     setFormValue("")
     messagesDiv.current!.scrollIntoView({behavior: "smooth"})
   }
-
-  const messagesRef = props.firestore.collection('messages')
+  
+  const messagesRef = props.firestore.collection('messages')  
   const query = messagesRef.orderBy('createdAt');
 
   const [messages] = useCollectionData(query, { idField: 'id' });
@@ -40,7 +38,7 @@ export const Chat: React.FC<PropsType> = (props) => {
   useEffect(() => {
     messagesDiv.current!.scrollIntoView({behavior: "smooth"})
   }, [messages])
-
+  
   const [formValue, setFormValue] = useState('');
 
 
@@ -48,7 +46,6 @@ export const Chat: React.FC<PropsType> = (props) => {
     <>
     <div className="chat__wrapper">
       {messages ? messages.map(message => <Message auth={props.auth} message={message}/>) : <Preloader></Preloader>}
-      {/* @ts-ignore */}
       <div ref={messagesDiv}></div>
     </div>
 

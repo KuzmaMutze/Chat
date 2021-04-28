@@ -6,10 +6,9 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { Login } from './components/Login/Login/Login';
-import { Header } from './components/Header/Header/Header';
-import { Chat } from './components/Chat/Chat/Chat';
-import { Preloader } from './components/common/Preloader';
+import { Login } from './components/Login/Login';
+import { Header } from './components/Header/Header';
+import { Chat } from './components/Chat/Chat';
 
 firebase.initializeApp({
   apiKey: "AIzaSyDJWcxWzMuBAVQYxnvS7Hfa3OUv9x1y0d8",
